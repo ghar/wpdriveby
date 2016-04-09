@@ -29,7 +29,7 @@ if [[ $answer =~ ^[Ww]$ ]]; then
 elif [[ $answer =~ ^[Xx]$ ]]; then
     echo -e "\nTrawling access-logs for xmlrpc.php hits..."
     grep ''$hourago'\|'$now'' $logDir | grep 'xmlrpc.php' | awk '{print $1}' | sort -n | \
-	uniq -c | sort -n | tail -50 | awk '{if($1>100)print "Hits:",$1, "IP:",$2}' | tee -a "firstgrep.txt"
+    uniq -c | sort -n | tail -50 | awk '{if($1>100)print "Hits:",$1, "IP:",$2}' | tee -a "firstgrep.txt"
 else
     echo -e "\nExited wpdriveby.sh"
     exit 1
