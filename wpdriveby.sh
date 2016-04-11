@@ -60,8 +60,6 @@ if [[ $1 =~ ^[-y]$ ]]; then
  block
  echo -e "\nExited wpdriveby.sh"
  exit 1
-else 
- continue
 fi
 
 # Prompt user and grep logs accordingly
