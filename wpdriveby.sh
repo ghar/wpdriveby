@@ -59,6 +59,8 @@ if [[ $1 =~ ^[-y]$ ]]; then
  block
  echo -e "\nExited wpdriveby.sh"
 else 
+ continue
+fi
 
 # Prompt user and grep logs accordingly
 read -p $'Search for hits on:\n[W] wp-login.php\n[X] xmlrpc.php\n[Q] Quit\n> ' -n 1 answer
