@@ -56,6 +56,7 @@ if [[ $1 =~ ^[-y]$ ]]; then
  xmlrpc_find 
  extract_ip
  add_csf
+ echo -e "\nBlocking IPs"
  block
  echo -e "\nExited wpdriveby.sh"
  exit 1
