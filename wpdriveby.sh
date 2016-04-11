@@ -58,6 +58,7 @@ if [[ $1 =~ ^[-y]$ ]]; then
  add_csf
  block
  echo -e "\nExited wpdriveby.sh"
+ exit 1
 else 
  continue
 fi
