@@ -32,7 +32,37 @@ function xmlrpc_find()  {
   uniq -c | sort -n | tail -50 | awk '{if($1>100)print "Hits:",$1, "IP:",$2}' | tee -a "firstgrep.txt"
 }
 
+function extract_ip {
+ grep "Hits:" firstgrep.txt | awk '{print $4}' | tac | egrep -o '([0-9]+\.){3}[0-9]+' > iplist.txt
+}
+
+function add_csf() {
+ while read line
+ do
+  echo "csf -d $line" >> blocklist.txt
+ done < iplist.txt
+}
+
+function block() {
+ echo "exit" >> blocklist.txt
+ chmod u+x blocklist.txt
+ sh blocklist.txt
+}
+
 cleanup
+
+if [[ $1 =~ ^[-y]$ ]]; then
+ wplogin_find
+ xmlrpc_find 
+ extract_ip
+ add_csf
+ echo -e "\nBlocking IPs"
+ block
+ echo -e "\nExited wpdriveby.sh"
+ exit 1
+else 
+ continue
+fi
 
 # Prompt user and grep logs accordingly
 read -p $'Search for hits on:\n[W] wp-login.php\n[X] xmlrpc.php\n[Q] Quit\n> ' -n 1 answer
@@ -58,18 +88,13 @@ then
 fi
 
 # extract IPs only
-grep "Hits:" firstgrep.txt | awk '{print $4}' | tac | egrep -o '([0-9]+\.){3}[0-9]+' > iplist.txt
+extract_ip
 
 # add csf deny to IPs
-while read line
-do
-  echo "csf -d $line" >> blocklist.txt
-done < iplist.txt
+add_csf
 
 # Block
-echo "exit" >> blocklist.txt
-chmod u+x blocklist.txt
-sh blocklist.txt
+block
 
 cleanup
 echo -e "\nAll Done"
